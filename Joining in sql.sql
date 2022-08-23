@@ -104,4 +104,57 @@ INNER JOIN pop_plus AS p
   ON c.code = p.country_code
 ORDER BY geosize_group
  
- 
+SELECT c1.name AS city, code, c2.name AS country,
+       region, city_proper_pop
+FROM cities AS c1
+  -- Join right table (with alias)
+  LEFT JOIN countries AS c2
+    -- Match on country code
+    ON c1.country_code = c2.code
+-- Order by descending country code
+ORDER BY code DESC;
+
+SELECT c.name AS country, local_name, l.name AS language, percent
+-- From left table (alias as c)
+FROM countries AS c
+  -- Join to right table (alias as l)
+  LEFT JOIN languages AS l
+    -- Match on fields
+    ON c.code = l.code
+-- Order by descending country
+ORDER BY country DESC;
+
+SELECT region, AVG(gdp_percapita) AS avg_gdp
+-- From countries (alias as c)
+FROM countries AS c
+  -- Left join with economies (alias as e)
+  LEFT JOIN economies AS e
+    -- Match on code fields
+    ON c.code = e.code
+-- Focus on 2010
+WHERE year = 2010
+-- Group by region
+GROUP BY region
+-- Order by descending avg_gdp
+ORDER BY avg_gdp DESC
+
+SELECT cities.name AS city, urbanarea_pop, countries.name AS country,
+       indep_year, languages.name AS language, percent
+FROM languages
+  RIGHT JOIN countries
+    ON languages.code = countries.code
+  RIGHT JOIN cities
+    ON countries.code = cities.country_code
+ORDER BY city, language;
+
+SELECT name AS country, code, region, basic_unit
+-- From countries
+FROM countries
+  -- Join to currencies
+  INNER JOIN currencies
+    -- Match on code
+    USING (code)
+-- Where region is North America or null
+WHERE region = 'North America' OR region IS NULL
+-- Order by region
+ORDER BY region;
