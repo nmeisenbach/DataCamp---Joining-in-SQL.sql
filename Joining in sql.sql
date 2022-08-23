@@ -174,3 +174,29 @@ WHERE year = 2010
 ORDER BY life_exp
 -- Limit to 5 records
 LIMIT 5
+
+-- Select fields from 2010 table
+SELECT code, year, income_group, gross_savings
+  -- From 2010 table
+FROM economies2010
+	-- Set theory clause
+UNION
+-- Select fields from 2015 table
+SELECT code, year, income_group, gross_savings
+  -- From 2015 table
+FROM economies2015
+-- Order by code and year
+ORDER BY code, year
+
+--Semi Join
+SELECT DISTINCT name
+  FROM languages
+-- Where in statement
+WHERE code IN 
+  -- Query from step 1
+  -- Subquery
+  (SELECT code
+   FROM countries
+   WHERE region = 'Middle East')
+-- Order by name
+ORDER BY name;
