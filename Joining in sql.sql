@@ -213,3 +213,21 @@ SELECT local_name, lang_num
   WHERE countries.code = subquery.code
 -- Order by descending number of languages
 ORDER BY lang_num DESC
+
+SELECT DISTINCT c.name, total_investment, imports
+  -- From table (with alias)
+  FROM countries AS c
+    -- Join with table (with alias)
+    LEFT JOIN economies AS e
+      -- Match on code
+      ON (c.code = e.code
+      -- and code in Subquery
+        AND e.code IN (
+          SELECT l.code
+          FROM languages AS l
+          WHERE official = 'true'
+        ) )
+  -- Where region and year are correct
+  WHERE region = 'Central America' AND year = 2015
+-- Order by field
+ORDER BY c.name;
